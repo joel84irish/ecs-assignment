@@ -46,4 +46,4 @@ serve -s build
 ## Advice & Tips �
 
 - This is just a simple app, you may use another app if you'd like. 
-- Use best practices for your Terraform code. Use best practices for your container image. Use best practices for your CI/CD pipeline.
+- Use best practices for your Terraform code. Use best practices for your container image. Use best practices for your CI/CD pipeline.# app
