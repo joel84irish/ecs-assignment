@@ -15,19 +15,24 @@ env:
   ECS_SERVICE: ${{ vars.ECS_SERVICE }}
 jobs: #only 1 job 
   unit-testing: 
-      name: unit Testing
-      runs-on: ubuntu:latest
-      steps: 
-      - name: 
-        uses:
-      - name: rolling cache #restore the cache from more keys. It will expire the cache once a month to keep it from growing too large
-        uses: bahmutov/npm-install@v1
-        with:
-          useRollingCache: true
-    
-  deploy: #deploy job
-    runs-on: linux-latest #operating system
+    runs-on: ubuntu-latest #operating system
+    steps:
+      - name: Docker image Testing
+        run:
+          docker images
+          docker run --name app -d  \
+              -p 8080:3000  \
+              ${{ vars.ECR_REPOSITORY }}/app:${{ github.sha}}
 
+          export IP=$(docker inspect -f '{{range .Networksettings.Networks}}{{.IPAddress}}{{end}}' app)
+          echo $IP
+
+          echo Testing image URL wget
+          wget -q -o - 127.0.0.1:3000/live | grep live
+    
+
+  deploy: #deploy job
+    runs-on: ubuntu-latest #operating system
     steps:
       - name: Checkout repository #checkout the code
         uses: actions/checkout@v2 
@@ -41,12 +46,6 @@ jobs: #only 1 job
         uses: docker/setup-qemu-action@v2
         with:
           platforms: linux/arm64
-
-      - name: 
-        uses:
-
-      - name: 
-        uses:
 
       - name: Set up Docker #set up docker on the machine 
         uses: docker/setup-buildx-action@v3
