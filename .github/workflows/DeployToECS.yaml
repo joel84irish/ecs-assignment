@@ -15,7 +15,7 @@ env:
   ECS_SERVICE: ${{ vars.ECS_SERVICE }}
 jobs: #only 1 job 
   unit-testing: 
-    runs-on: ubuntu-latest #operating s
+    runs-on: ubuntu-latest #operating 
     steps:
       - name: Docker image Testing
         run:
@@ -68,11 +68,4 @@ jobs: #only 1 job
           docker buildx inspect --bootstrap
           docker buildx build --platform linux/arm64 -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com//app:latest --push .
 
-      - name: Deploy to ECS
-        uses: imehedi/actions-awscli-v2@latest
-        with:
-          args: ecs update-service --cluster MY_ECS_CLUSTER --service service --force-new-deployment #only changing the version of the ECR image
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: "us-west-2"
+      
