@@ -1,9 +1,9 @@
 
-name: Deploy to Amazon ECS #j
+name: Deploy to Amazon ECS 
 
 on:
   push:
-    branches: [ "main", "feature" ]
+    branches: [ "main", "feature" ] #
 
 jobs:
   build-and-deploy:
