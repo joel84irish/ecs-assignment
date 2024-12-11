@@ -5,7 +5,8 @@ on:
     paths:
       - "app/**"
     branches:
-      - main #branch name to configure your work flow to 0only run on push requests 
+      - main
+      - feature #branch name to configure your work flow to 0only run on push requests 
 
 env:
   # Setting an environment variable with the value of a configuration variable
