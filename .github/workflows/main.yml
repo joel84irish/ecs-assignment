@@ -5,19 +5,17 @@ on:
     branches: [ "main", "feature" ] 
 
 jobs:
-  jobs:
   provisioning:
     runs-on: ubuntu-latest
     steps:
-    - uses: kciter/terraform-apply-for-aws-action@v3
-      with:
+     - uses: kciter/terraform-apply-for-aws-action@v3
+       with:
         access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         region: ap-northeast-2
         variables: var=${{ github.sha }}
         path: terraform/dev
-
-        defaults:
+defaults:
         run:
          working-directory: src
          steps:
