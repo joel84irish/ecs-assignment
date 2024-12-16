@@ -43,7 +43,7 @@ defaults:
          - name: Terraform Apply
            run: terraform apply -auto-approve
 
-  build-and-deploy:
+build-and-deploy:
     runs-on: [ubuntu-latest]
     steps:
       - name: Checkout source
