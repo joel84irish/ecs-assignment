@@ -1,78 +1,86 @@
-name: Build and Deploy Docker images to ECS
+ame: "Terraform"
 
 on:
   push:
-    paths:
-      - "app/**"
-    branches:
-      - main #branch name to configure your work flow to 0only run on push requests 
+    branches: [ "main", "feature" ] 
 
-env:
-  # Setting an environment variable with the value of a configuration variable
-  ECR_IMAGE: ${{ vars.ECR_IMAGE }}
-  AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-  ECS_CLUSTER: ${{ vars.ECS_CLUSTER }}
-  ECS_SERVICE: ${{ vars.ECS_SERVICE }}
-jobs: #only 1 job 
-  unit-testing: 
-    runs-on: ubuntu-latest #operating system
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    defaults:
+      run:
+        working-directory: src
     steps:
-      - name: Docker image Testing
-        run:
-          docker images
-          docker run --name app -d  \
-              -p 8080:3000  \
-              ${{ vars.ECR_REPOSITORY }}/app:${{ github.sha}}
+      - name: Checkout
+        uses: actions/checkout@v2
 
-          export IP=$(docker inspect -f '{{range .Networksettings.Networks}}{{.IPAddress}}{{end}}' app)
-          echo $IP
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.1
+          terraform_wrapper: false
 
-          echo Testing image URL wget
-          wget -q -o - 127.0.0.1:3000/live | grep live
-    
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
 
-  deploy: #deploy job
-    runs-on: ubuntu-latest #operating system
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+   build-and-deploy:
+    runs-on: [ubuntu-latest]
     steps:
-      - name: Checkout repository #checkout the code
-        uses: actions/checkout@v2 
-
-      - name: Set up QEMU for arm64 #check out the arm64 machine
-        run: |
-          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-        if: runner.os == 'Linux'
-
-      - name: Set up Docker for arm64 #check out docker on the machine 
-        uses: docker/setup-qemu-action@v2
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          platforms: linux/arm64
-
-      - name: Set up Docker #set up docker on the machine 
-        uses: docker/setup-buildx-action@v3
-
-      - name: Configure AWS credentials #set up aws cli and login
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2
-
-      - name: Login to Amazon ECR #login to ECR
-        run: |
-          aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-
-      - name: Build and push Docker image # Build and push Docker image to ECR
-        run: |
-          cd ECS-ASSIGNMENT
-          docker buildx create --use
-          docker buildx inspect --bootstrap
-          docker buildx build --platform linux/arm64 -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com//app:latest --push .
-
-      - name: Deploy to ECS
-        uses: imehedi/actions-awscli-v2@latest
+          aws-region: 'us-west-2'
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
         with:
-          args: ecs update-service --cluster MY_ECS_CLUSTER --service service --force-new-deployment #only changing the version of the ECR image
+          mask-password: 'true'
+          
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: "us-west-2"
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+          REPOSITORY: app
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT    
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: app-task-definition.json 
+          container-name: app
+          image: ${{ steps.build-image.outputs.image }}    
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: service
+          cluster: MY_ECS_CLUSTER
+          wait-for-service-stability: true    
