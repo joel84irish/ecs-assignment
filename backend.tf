@@ -8,9 +8,9 @@ terraform {
   }
 }
 provider "aws" {}
-export AWS_ACCESS_KEY_ID="anaccesskey"
-export AWS_SECRET_ACCESS_KEY="asecretkey"
-export AWS_REGION="us-west-2"
+% export AWS_ACCESS_KEY_ID="AWS_ACCESS_KEY_ID"
+% export AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY"
+% export AWS_REGION="us-west-2"
 
 # S3 Bucket for TF State File
 resource "aws_s3_bucket" "terraform_state" {
