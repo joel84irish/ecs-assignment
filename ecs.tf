@@ -26,7 +26,7 @@ resource "aws_ecs_service" "service3" {
 }
 
 
-resource "aws_ecs_task_definition" "MY_ECS_TASK_DEFINITION_6" {
+resource "aws_ecs_task_definition" "td" {
   container_definitions = jsonencode([
    {
      name      = "app"
