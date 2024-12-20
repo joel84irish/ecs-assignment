@@ -15,7 +15,7 @@ jobs:
         working-directory: ./
     steps:
       - name: Configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: arn:aws:iam::766261352911:role/GitActions
           aws-region: us-west-2
