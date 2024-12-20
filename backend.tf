@@ -8,8 +8,8 @@ terraform {
   }
 }
 provider "aws" {
-  region = "us-west-2"
 }
+
 # S3 Bucket for TF State File
 resource "aws_s3_bucket" "terraform_state" {
   tags = {
