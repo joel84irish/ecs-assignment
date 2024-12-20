@@ -54,4 +54,13 @@ resource "aws_lb_listener" "nlb_https" {
   }
 }
 
+resource "aws_lb_listener_rule" "rule" {
+  listener_arn = aws_lb_listener.nlb_http.arn
+  priority     = 10
 
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.ecs_tg.arn
+  }
+}
