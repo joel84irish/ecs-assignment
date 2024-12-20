@@ -13,7 +13,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     defaults:
       run:
-        working-directory: ecs-assignment
+        working-directory: ./
     steps:
       - name: Checkout
         uses: actions/checkout@v3
