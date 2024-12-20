@@ -6,7 +6,7 @@ resource "aws_lb" "example" {
     subnet_id     = aws_subnet.sn3.id
     allocation_id = aws_eip.NatGateway_eip.id
   }
-
+}
 
 resource "aws_lb_target_group" "ecs_tg" {
  name        = "ecs-target-group"
