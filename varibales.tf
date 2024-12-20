@@ -9,7 +9,7 @@ variable "vpc_cidr" {
 variable "availability_zones" {
   description = "AZs for Subnets"
   type        = list(string)
-  default     = ["us-wast-1a", "us-west-1b"]
+  default     = ["us-wast-2a", "us-west-2b"]
 }
 
 variable "public_subnet_cidrs" {
