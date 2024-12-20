@@ -3,7 +3,7 @@ resource "aws_lb" "example" {
   load_balancer_type = "network"
 
   subnet_mapping {
-    subnet_id     = aws_subnet.sn3.id
+    subnet_id     = aws_subnet.sn1.id
     allocation_id = aws_eip.NatGateway_eip.id
   }
 }
