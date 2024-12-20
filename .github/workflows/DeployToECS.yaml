@@ -40,8 +40,8 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/feature' && github.event_name == 'push'
-        run: terraform apply 
-
+        run: terraform apply -auto-approve
+        
   build-and-deploy:
     runs-on: [ubuntu-latest]
     steps:
