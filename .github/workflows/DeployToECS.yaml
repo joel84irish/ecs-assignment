@@ -4,7 +4,9 @@ name: Deploy to Amazon ECS
 on:
   push:
     branches: [ "feature" ] #
-
+permissions:
+  id-token: write
+  contents: read
 jobs:
   terraform:
     name: 'Terraform'
