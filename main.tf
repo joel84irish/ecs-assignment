@@ -25,19 +25,6 @@ resource "aws_subnet" "sn3" {
   }
 }
 
-resource "aws_eip" "NatGateway_eip" {
-  tags = {
-    Name    = "NatGatewayEIP"
-  }
-}
-resource "aws_nat_gateway" "NatGateway" {
-  allocation_id = aws_eip.NatGateway_eip.id
-  subnet_id     = aws_subnet.sn3.id
-  tags = {
-    Name    = "NatGateway"
-
-  }
-
 
 }
 resource "aws_security_group" "sg" {
