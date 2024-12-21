@@ -4,7 +4,7 @@ resource "aws_lb_target_group" "target_group" {
   port                      = var.container_port
   protocol                  = "HTTP"
   target_type               = "ip"
-  vpc_id                    = aws_vpc.vpc.id
+  vpc_id                    = aws_vpc.my-vpc.id
   health_check {
       path                  = "/health"
       protocol              = "HTTP"
