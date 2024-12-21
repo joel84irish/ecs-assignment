@@ -10,5 +10,5 @@ output "public_dns" {
 
 
 output "target_group_arn" {
-  value = aws_lb_target_group.ecs_tg.id
+  value = aws_lb_target_group.target_group.id
 }
