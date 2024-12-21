@@ -78,16 +78,6 @@ resource "aws_route_table" "rt" {
   }
 }
 
-resource "aws_route_table" "rt2" {
-  vpc_id = aws_vpc.my-vpc.id
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.NatGateway.id
-  }
-  tags = {
-    Name    = "Private"
-  }
-}
 resource "aws_route_table_association" "route1" {
   route_table_id = aws_route_table.rt.id
   subnet_id      = aws_subnet.sn1.id
@@ -102,10 +92,4 @@ resource "aws_network_interface" "ecs_eni" {
   subnet_id = aws_subnet.sn1.id
   security_groups = [aws_security_group.sg.id]
 }
-
-resource "aws_eip_association" "example" {
-  network_interface_id = aws_network_interface.ecs_eni.id
-  allocation_id = aws_eip.NatGateway_eip.id
-}
-
 
