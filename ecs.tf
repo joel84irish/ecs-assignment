@@ -22,7 +22,9 @@ resource "aws_ecs_service" "service3" {
     target_group_arn = aws_lb_target_group.target_group.id
     container_name = "app"
     container_port = 3000
-  }
+
+    deepends on    = [aws_lb_target_group.target_group.id]  
+}
 }
 
 
