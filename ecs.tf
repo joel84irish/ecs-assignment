@@ -19,7 +19,7 @@ resource "aws_ecs_service" "service3" {
     subnets          = [aws_subnet.sn1.id, aws_subnet.sn2.id]
   }
   load_balancer {
-    target_group_arn = aws_lb_target_group.ecs_tg.id
+    target_group_arn = aws_lb_target_group.target_group.id
     container_name = "app"
     container_port = 3000
   }
