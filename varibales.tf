@@ -24,3 +24,6 @@ variable "private_subnet_cidrs" {
   default     = ["10.0.4.0/24"]
 }
 
+variable "container_port" {
+  default     = "3000"
+}
