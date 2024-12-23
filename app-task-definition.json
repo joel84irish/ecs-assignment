@@ -1,5 +1,5 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-west-2:766261352911:task-definition/MY_ECS_TASK_DEFINITION",
+    "taskDefinitionArn": "arn:aws:ecs:us-west-2:766261352911:task-definition/MY_ECS_TASK_DEFINITION:6",
     "containerDefinitions": [
         {
             "name": "app",
