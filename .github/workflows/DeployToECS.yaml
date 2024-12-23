@@ -43,6 +43,9 @@ jobs:
         run: terraform apply -auto-approve
         
   build-and-deploy:
+    defaults:
+      run:
+        working-directory: scr    
     runs-on: [ubuntu-latest]
     steps:
       - name: Configure aws credentials
