@@ -45,7 +45,7 @@ jobs:
   build-and-deploy:
     defaults:
       run:
-        working-directory: scr    
+        working-directory: ./    
     runs-on: [ubuntu-latest]
     steps:
       - name: Configure aws credentials
