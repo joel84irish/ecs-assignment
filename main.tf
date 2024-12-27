@@ -23,42 +23,6 @@ resource "aws_subnet" "sn2" {
 }
 
 
-resource "aws_security_group" "sg-tf" {
-  name        = "sg-tf"
-  description = "Allow TLS inbound traffic and all outbound traffic"
-  vpc_id      = aws_vpc.my-vpc.id
-
-  ingress {
-    description      = "http"
-    from_port        = 3000
-    to_port          = 3000
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description      = "https"
-    from_port        = 3000
-    to_port          = 3000
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-
-  ingress {
-    description      = "http"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-  
-egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"]
-  }
-}
-
 resource "aws_internet_gateway" "gw-tf" {
   vpc_id = aws_vpc.my-vpc-tf.id
 }
@@ -91,4 +55,35 @@ resource "aws_network_interface" "ecs_eni-tf" {
   subnet_id = aws_subnet.sn1.id
   security_groups = aws_security_group.sg-tf.id
 }
+resource "aws_security_group" "sg-tf" {
+  name        = "sg-tf"
+  description = "Allow TLS inbound traffic and all outbound traffic"
+  vpc_id      = aws_vpc.my-vpc.id
+
+  ingress {
+    description      = "http"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description      = "https"
+    from_port        = 3000
+    to_port          = 3000
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+
+  
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "tcp"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+  }
+
 
