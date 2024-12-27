@@ -18,12 +18,20 @@ variable "public_subnet_cidrs" {
   default     = ["10.0.1.0/24", "10.0.3.0/24"]
 }
 
-variable "private_subnet_cidrs" {
-  description = "CIDRs for Private Subnets"
-  type        = list(string)
-  default     = ["10.0.4.0/24"]
-}
 
 variable "container_port" {
   default     = "3000"
 }
+
+variable "domain_name" {
+  description = "Domain name"
+  type        = string
+  default     = "joelirish.app"
+}
+
+variable "record_name" {
+  description = "Sub domain name"
+  type        = string
+  default     = "www"
+}
+
