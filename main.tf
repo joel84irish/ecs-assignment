@@ -51,10 +51,7 @@ resource "aws_route_table_association" "route2" {
   subnet_id      = aws_subnet.sn2.id
 }
 
-resource "aws_network_interface" "ecs_eni-tf" {
-  subnet_id = aws_subnet.sn1.id
-  security_groups = aws_security_group.sg-tf.id
-}
+
 resource "aws_security_group" "sg-tf" {
   name        = "TERRAFORM"
   description = "Allow TLS inbound traffic and all outbound traffic"
@@ -86,4 +83,7 @@ resource "aws_security_group" "sg-tf" {
   }
   }
 
-
+resource "aws_network_interface" "ecs_eni-tf" {
+  subnet_id = aws_subnet.sn1.id
+  security_groups = aws_security_group.sg-tf.id
+}
