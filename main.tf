@@ -56,7 +56,7 @@ resource "aws_network_interface" "ecs_eni-tf" {
   security_groups = aws_security_group.sg-tf.id
 }
 resource "aws_security_group" "sg-tf" {
-  name        = "sg-tf"
+  name        = "TERRAFORM"
   description = "Allow TLS inbound traffic and all outbound traffic"
   vpc_id      = aws_vpc.my-vpc-tf.id
 
