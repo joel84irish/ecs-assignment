@@ -28,7 +28,7 @@ resource "aws_internet_gateway" "gw-tf" {
 }
 
 resource "aws_route_table" "rt" {
-  vpc_id = aws_vpc.my-vpc.id
+  vpc_id = aws_vpc.my-vpc-tf.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -58,7 +58,7 @@ resource "aws_network_interface" "ecs_eni-tf" {
 resource "aws_security_group" "sg-tf" {
   name        = "sg-tf"
   description = "Allow TLS inbound traffic and all outbound traffic"
-  vpc_id      = aws_vpc.my-vpc.id
+  vpc_id      = aws_vpc.my-vpc-tf.id
 
   ingress {
     description      = "http"
