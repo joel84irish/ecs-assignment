@@ -89,6 +89,6 @@ resource "aws_route_table_association" "route2" {
 
 resource "aws_network_interface" "ecs_eni-tf" {
   subnet_id = aws_subnet.sn1.id
-  security_groups = [aws_security_group.sg-tf.id]
+  security_groups = aws_security_group.sg-tf.id
 }
 
