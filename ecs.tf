@@ -2,7 +2,7 @@
 resource "aws_ecs_service" "SERVICE_APP_FINAL" {
   name = "TERRAFORM_SERVICE"
   cluster                = aws_ecs_cluster.TERRAFORM_CLUSTER.arn
-  task_definition        = aws_ecs_task_definition.ECS_TASK_DEFINITION_APP:4.arn  
+  task_definition        = aws_ecs_task_definition.ECS_TASK_DEFINITION_APP.arn  
   launch_type            = "FARGATE"
   desired_count          = 2  
   force_new_deployment   = true  
