@@ -86,6 +86,6 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: SERVICE_APP_FINAL
+          service: arn:aws:ecs:us-west-2:766261352911:service/MY_ECS_CLUSTER/SERVICE_APP_FINAL
           cluster: TERRAFORM_CLUSTER
           wait-for-service-stability: true    
