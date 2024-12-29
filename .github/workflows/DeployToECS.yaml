@@ -87,5 +87,5 @@ jobs:
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: arn:aws:ecs:us-west-2:766261352911:service/MY_ECS_CLUSTER/SERVICE_APP_FINAL
-          cluster: TERRAFORM_CLUSTER
+          cluster: arn:aws:ecs:us-west-2:766261352911:cluster/MY_ECS_CLUSTER
           wait-for-service-stability: true    
