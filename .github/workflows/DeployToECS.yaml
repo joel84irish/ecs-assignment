@@ -38,4 +38,14 @@ jobs:
           terraform workplace new ${{ env.environment }}
           terraform workplace select ${{ env.environment }} && terraform plan
           terraform workplace select ${{ env.environment }} && terraform apply 
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/feature' && github.event_name == 'push'
+        run: terraform apply -auto-approve  build-and-push:&& terraform plan
+          terraform workplace select ${{ env.environment }} && terraform apply 
         
+      
