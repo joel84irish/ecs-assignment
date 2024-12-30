@@ -35,8 +35,7 @@ jobs:
         working-directory: ./        
         run: 
           terraform init 
-          terraform workplace new ${{ env.environment }}
-          terraform workplace select ${{ env.environment }} 
+          terraform workplace new ${{ env.environment }} && terraform workplace select ${{ env.environment }} 
 
       - name: Terraform Plan
         id: plan
